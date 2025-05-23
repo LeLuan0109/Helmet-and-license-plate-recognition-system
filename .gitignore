@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/s
+*.py[cod]
+*$py.class
+
+# Cấu hình môi trường ảo
+venv/
+env/
+.venv/
+.env/
+
+# Thư mục output và temp (theo code bạn đặt tên)
+violations_2/
+temp_frames_2/
+
+# Thư mục chứa logs, caches
+*.log
+*.cache
+*.pkl
+*.pickle
+
+# Thư mục IDE
+.vscode/
+.idea/
+
+# Các file hệ thống
+.DS_Store
+Thumbs.db
+
+# Cấu hình Python pipenv
+Pipfile.lock
+
+
