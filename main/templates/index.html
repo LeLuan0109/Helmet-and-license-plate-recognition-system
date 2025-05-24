@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Helmet & License Plate Detection</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 240px;
+      background: #1e3a8a;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      gap: 20px;
+      box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h2 {
+      margin: 0 0 30px;
+      font-size: 24px;
+      border-bottom: 2px solid #3b82f6;
+      padding-bottom: 10px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: #3b82f6;
+    }
+
+    .content {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .wrapper {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      width: 95%;
+      max-width: 900px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      color: #1e3a8a;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    input[type="file"] {
+      padding: 12px;
+      border: 2px dashed #94a3b8;
+      background: #f8fafc;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 400px;
+      font-size: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    input[type="file"]:hover {
+      border-color: #3b82f6;
+      background-color: #e0f2fe;
+    }
+
+    button {
+      background-color: #2563eb;
+      color: white;
+      font-size: 18px;
+      padding: 12px 40px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    button:hover {
+      background-color: #1e40af;
+    }
+
+    .video-output {
+      margin-top: 40px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .video-output video {
+      width: 100%;
+      max-height: 480px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Navigation</h2>
+    <a href="{% url 'upload_video' %}" class="{% if request.path == '/upload/' %}active{% endif %}">Tải video</a>
+    <a href="{% url 'media_select' %}" class="{% if request.path == '/media-select/' %}active{% endif %}">Chọn từ thư mục Media</a>
+  </div>
+
+  <div class="content">
+    <div class="wrapper">
+      <h1>Nhận diện mũ bảo hiểm và biển số xe</h1>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Tải lên</button>
+      </form>
+
+        {% if uploaded_video_url %}
+        <div class="video-output">
+            <h2> Video đã tải </h2>
+            <video controls>
+            <source src="{{ uploaded_video_url }}" type="video/mp4" />
+            Your browser does not support the video tag.
+            </video>
+        </div>
+        {% endif %}
+
+    </div>
+  </div>
+</body>
+</html>

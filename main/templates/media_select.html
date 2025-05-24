@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Xử lý video từ thư mục media</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f1f5f9;
+            padding: 20px;
+        }
+        nav {
+            background-color: #1e3a8a;
+            padding: 15px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 20px;
+            font-size: 18px;
+            text-decoration: none;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .video-list form {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        video {
+            margin-top: 30px;
+            width: 100%;
+            max-height: 480px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Tải video</a>
+        <a href="/media-select/">Chọn từ media</a>
+    </nav>
+
+    <div class="container">
+        <h2>Chọn video có sẵn trong thư mục media để xử lý</h2>
+        <div class="video-list">
+            {% for video in video_files %}
+                <form method="post">
+                    {% csrf_token %}
+                    <span>{{ video }}</span>
+                    <input type="hidden" name="video_path" value="{{ video }}">
+                    <button type="submit">Xử lý</button>
+                </form>
+            {% endfor %}
+        </div>
+
+        {% if processed_video_url %}
+        <h3>Kết quả sau xử lý</h3>
+        <video controls>
+            <source src="{{ processed_video_url }}" type="video/mp4" />
+        </video>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -10,8 +10,8 @@ from cloudinary_uploader import upload_image_to_cloudinary
 from tele import send_violation_alert
 
 
-HELMET_MODEL_PATH = r"C:\Work\Leanring\Helmet-rider-license_plate\best.pt"
-PLATE_MODEL_PATH = r"C:\Work\Leanring\Helmet-rider-license_plate\best.pt"
+HELMET_MODEL_PATH = r'C:\Users\Admin\Documents\Luan\Helmet-and-license-plate-recognition-system\best.pt'
+PLATE_MODEL_PATH = r'C:\Users\Admin\Documents\Luan\Helmet-and-license-plate-recognition-system\license_plate_detector.pt'
 FRAME_INTERVAL = 0.5  # giây
 DISTANCE_THRESHOLD = 100
 OUTPUT_DIR = 'violations'
@@ -108,7 +108,7 @@ def send_tele_and_upload(rider_path, plate_path, location):
 def process_frames(temp_frames_dir, output_dir, location):
     processed_centers = []
 
-    for img_file in sorted(os.listdir(temp_frames_dir)):
+    for img_file in sorted(os.listdir(temp_frames_dir)):    
         img_path = os.path.join(temp_frames_dir, img_file)
         frame = enhance_image(cv2.imread(img_path))
         results = helmet_model(frame)[0]
@@ -183,3 +183,14 @@ def process_video_for_violations(video_path: str, location: str):
     extract_frames(video_path, TEMP_FRAMES_DIR, interval=FRAME_INTERVAL)
     process_frames(TEMP_FRAMES_DIR, OUTPUT_DIR, location)
     print("🏁 Xử lý hoàn tất cho video:", video_path)
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input', required=True, help='Path to input video')
+    parser.add_argument('--output', required=False, help='(Tùy chọn) Output path – không dùng hiện tại')
+    parser.add_argument('--location', default='HN', help='Location code (e.g. HN, SG)')
+
+    args = parser.parse_args()
+
+    process_video_for_violations(args.input, args.location)
