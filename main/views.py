@@ -4,19 +4,16 @@ import os
 import uuid
 from django.conf import settings
 import subprocess
+import threading
 
+from main.helmet.helmet_detection_pipeline import process_video_for_violations
 def ensure_media_folder():
     os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
 
 def process_video(input_path, output_path):
     try:
-        result = subprocess.run([
-            'python', r'C:\Users\Admin\Documents\Luan\Helmet-and-license-plate-recognition-system\app\helmet_detection_pipeline.py',
-            '--input', input_path,
-            '--output', output_path
-        ], check=True, capture_output=True, text=True)
-        print("Subprocess output:", result.stdout)
-        print("Subprocess error (if any):", result.stderr)
+       print("Processing video:", input_path)
+       process_video_for_violations(input_path)
     except subprocess.CalledProcessError as e:
         print("Error during video processing:", e.stderr)
         raise
@@ -25,6 +22,7 @@ def upload_video(request):
     ensure_media_folder()
 
     uploaded_video_url = None
+    video_evidence_url = None
     form = VideoUploadForm()
 
     if request.method == 'POST':
@@ -40,14 +38,18 @@ def upload_video(request):
                     destination.write(chunk)
 
             uploaded_video_url = settings.MEDIA_URL + video_name
-
+            video_evidence_url = process_video_for_violations(input_path, "Hà Nội")
+            print("Video evidence URL:", video_evidence_url)
+            print("Uploaded video URL:", uploaded_video_url)
     return render(request, 'index.html', {
         'form': form,
-        'uploaded_video_url': uploaded_video_url
+        'uploaded_video_url': uploaded_video_url,
+        'video_evidence_url': video_evidence_url,
     })
 
 
 def media_select(request):
+    
     media_path = settings.MEDIA_ROOT
     video_files = [f for f in os.listdir(media_path) if f.endswith('.mp4') or f.endswith('.avi')]
 

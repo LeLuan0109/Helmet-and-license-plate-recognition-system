@@ -40,7 +40,7 @@ ROOT_URLCONF = 'HelmetProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [r'C:\Users\Admin\Documents\Luan\Helmet-and-license-plate-recognition-system\main\templates'], # Thư mục chứa template của bạn nếu có
+        'DIRS': [BASE_DIR / 'main' / 'templates'],  # ← dùng đường dẫn tương đối
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,6 +79,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Cấu hình media files (ảnh, file upload)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_BOUNDING_BOX_URL = '/media-bounding-box/'
+MEDIA_BOUNDING_BOX_ROOT = os.path.join(BASE_DIR, 'media-bounding-box')
 
 # Kích thước file upload tối đa (nếu cần)
 # DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440  # 2.5 MB (ví dụ)
